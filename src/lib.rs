@@ -36,18 +36,22 @@
 //! ```
 extern crate time;
 
-#[allow(unused_imports)]
-use std::num;
-#[allow(unused_imports)]
-use time::get_time;
+use time::Timespec;
+
+/// A shortcut to time's `get_time` function. This is so that the user of timeit doesn't have to
+/// separately add a dependency for the time crate.
+pub fn get_time() -> Timespec {
+    use time::get_time;
+    get_time()
+}
 
 #[macro_export]
 /// Runs a block a specified number of times and returns the average time of execution.
 macro_rules! timeit_loops {
     ($loops:expr, $code:block) => ({
-        let mut times: Vec<f64> = Vec::new();
-        let mut n = $loops;
-        let mut i = 0;
+        use timeit::get_time;
+
+        let n = $loops;
         let start = get_time();
         for _ in 0..n {
             $code
@@ -66,12 +70,10 @@ macro_rules! timeit_loops {
 macro_rules! timeit {
     ($code:block) => ({
         let mut n = 1;
-        let mut sec = 0.0;
-        sec = timeit_loops!(n, $code);
-        let total = sec;
+        let mut sec = timeit_loops!(n, $code);
         let mut again = true;
 
-        let l = total.log10().ceil() as isize;
+        let l = sec.log10().ceil() as isize;
 
         if l < -5 {
             n = 1000_000;
