@@ -1,6 +1,6 @@
 [package]
 name = "timeit"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Gustav Larsson <gustav.m.larsson@gmail.com>"]
 description = "Timing macros for Rust modelled after Python's timeit"
 repository = "https://github.com/gustavla/timeit"
