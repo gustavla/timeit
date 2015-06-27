@@ -1,7 +1,7 @@
 # Timeit for Rust
 
 This crate provides macros that make it easy to benchmark blocks of code. It is
-inspired and named after timeit from Python.
+inspired and named after [timeit](https://docs.python.org/3/library/timeit.html) from Python.
 
 ## Examples
 
