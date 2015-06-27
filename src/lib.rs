@@ -73,7 +73,9 @@ macro_rules! timeit {
 
         let l = total.log10().ceil() as isize;
 
-        if -5 <= l && l <= 0 {
+        if l < -5 {
+            n = 1000_000;
+        } else if l <= 0 {
             n = 10isize.pow((-l) as u32);
         } else {
             again = false;
