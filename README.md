@@ -11,7 +11,7 @@ extern crate timeit;
 
 fn main() {
     timeit!({
-        let mut x: Vec<u64> = Vec::new();
+        let mut x = Vec::new();
         for i in 0..1000 {
             x.push(i);
         }
@@ -30,7 +30,7 @@ save the elapsed time to a variable, use the `timeit_loops!` macro:
 
 ```rust
 let sec = timeit_loops!(100, {
-    let mut x: Vec<u64> = Vec::new();
+    let mut x = Vec::new();
     for i in 0..1000 {
         x.push(i);
     }
