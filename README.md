@@ -1,3 +1,5 @@
+[![Crates.io](https://img.shields.io/crates/v/timeit.svg)](https://crates.io/crates/timeit)
+
 # Timeit for Rust
 
 This crate provides macros that make it easy to benchmark blocks of code. It is
