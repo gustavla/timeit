@@ -11,6 +11,3 @@ license = "MIT"
 [lib]
 name = "timeit"
 doctest = false
-
-[dependencies]
-time = "0.1.26"
