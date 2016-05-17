@@ -34,31 +34,21 @@
 //!     }
 //! });
 //! ```
-extern crate time;
-
-use time::Timespec;
-
-/// A shortcut to time's `get_time` function. This is so that the user of timeit doesn't have to
-/// separately add a dependency for the time crate.
-pub fn get_time() -> Timespec {
-    use time::get_time;
-    get_time()
-}
 
 #[macro_export]
 /// Runs a block a specified number of times and returns the average time of execution.
 macro_rules! timeit_loops {
     ($loops:expr, $code:block) => ({
-        use timeit::get_time;
+        use std::time::Instant;
 
         let n = $loops;
-        let start = get_time();
+        let start = Instant::now();
         for _ in 0..n {
             $code
         }
-        let end = get_time();
-        let sec = (end.sec - start.sec) as f64 +
-                  (end.nsec - start.nsec) as f64 / 1_000_000_000.0;
+        let elapsed = start.elapsed();
+        let sec = elapsed.as_secs() as f64 +
+                  elapsed.subsec_nanos() as f64 / 1_000_000_000.0;
 
         sec / (n as f64)
     })
