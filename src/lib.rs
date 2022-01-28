@@ -34,41 +34,26 @@
 //!     }
 //! });
 //! ```
-extern crate time;
-
-use time::Timespec;
-
-/// A shortcut to time's `get_time` function. This is so that the user of timeit doesn't have to
-/// separately add a dependency for the time crate.
-pub fn get_time() -> Timespec {
-    use time::get_time;
-    get_time()
-}
 
 #[macro_export]
 /// Runs a block a specified number of times and returns the average time of execution.
 macro_rules! timeit_loops {
-    ($loops:expr, $code:block) => ({
-        use timeit::get_time;
-
+    ($loops:expr, $code:block) => {{
         let n = $loops;
-        let start = get_time();
+        let start = std::time::Instant::now();
         for _ in 0..n {
             $code
         }
-        let end = get_time();
-        let sec = (end.sec - start.sec) as f64 +
-                  (end.nsec - start.nsec) as f64 / 1_000_000_000.0;
-
+        let sec = start.elapsed().as_secs_f64();
         sec / (n as f64)
-    })
+    }};
 }
 
 #[macro_export]
 /// Runs a block several times and outputs the average time per loop. The number of loops is
 /// determined automatically.
 macro_rules! timeit {
-    ($code:block) => ({
+    ($code:block) => {{
         let mut n = 1;
         let mut sec = timeit_loops!(n, $code);
         let mut again = true;
@@ -98,5 +83,25 @@ macro_rules! timeit {
         };
 
         println!("{} loops: {} {}", n, sec / mult, unit_str);
-    })
+    }};
+}
+
+#[cfg(test)]
+mod tests {
+    use super::timeit;
+
+    fn do_math() -> u64 {
+        let mut i = 1u64;
+        for j in 0..1_000_000 {
+            i = i.saturating_add(j);
+        }
+        i
+    }
+
+    #[test]
+    fn test_it() {
+        timeit!({
+            do_math();
+        });
+    }
 }
