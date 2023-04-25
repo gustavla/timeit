@@ -70,7 +70,7 @@ macro_rules! timeit_loops {
 macro_rules! timeit {
     ($code:block) => ({
         let mut n = 1;
-        let mut sec = timeit_loops!(n, $code);
+        let mut sec = timeit::timeit_loops!(n, $code);
         let mut again = true;
 
         let l = sec.log10().ceil() as isize;
@@ -84,7 +84,7 @@ macro_rules! timeit {
         }
 
         if again {
-            sec = timeit_loops!(n, $code);
+            sec = timeit::timeit_loops!(n, $code);
         }
 
         let (mult, unit_str) = if sec > 1.0 {
